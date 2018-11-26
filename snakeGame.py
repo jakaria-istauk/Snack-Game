@@ -6,17 +6,27 @@ import tkinter as tk
 from tkinter import messagebox
 
 class cube(object):
-	rows = 0
-	w = 0
+	rows = 20
+	w = 500
 
 	def __init__(self, start, dirnx=1, dirny=0, color=(255,0,0)):
-		pass
+		self.pos = start
+		self.dirnx = 1
+		self.dirny = 0
+		self.color = color
 
 	def move(self, dirnx,dirny):
-		pass
+		self.dirnx = dirnx
+		self.dirny = dirny
+		self.pos(self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
 	def draw(self, surface, eyes=False):
-		pass
+		dis = self.w // self.rows
+		i = self.pos[0]
+		j = self.pos[1]
+
+		pygame.draw.rect(surface, self.color, (i*dis+1, j*dis+1, dis-2, dis-2))
+		
 
 
 class snake(object):
@@ -25,7 +35,7 @@ class snake(object):
 	def __init__(self, color, pos):
 		self.color = color
 		self.head = cube(pos)
-		self.body = append(self.head)
+		self.body.append(self.head)
 		self.dirnx = 0
 		self.dirny = 1
 
@@ -89,7 +99,11 @@ class snake(object):
 		pass
 
 	def draw(self, surface):
-		pass
+		for i, c in enumerate(self.body):
+			if i == 0:
+				c.draw(surface, True)
+			else:
+				c.draw(surface)
 
 def drawGird(w, rows, surface):
 	sizebtwn = w // rows
@@ -105,8 +119,9 @@ def drawGird(w, rows, surface):
 		pygame.draw.line(surface, (255,255,255), (0,y), (w,y))
 
 def redrowWindow(surface):
-	global rows, width
+	global rows, width, s
 	surface.fill((0,0,0))
+	s.draw(surface)
 	drawGird(width, rows, surface)
 	pygame.display.update()
 
@@ -117,7 +132,7 @@ def message_box():
 	pass
 
 def main():
-	global rows, width
+	global rows, width, s
 	width = 500
 	rows = 20
 	win = pygame.display.set_mode((width, width))
